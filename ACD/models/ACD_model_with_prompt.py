@@ -4,6 +4,7 @@ import torch.nn as nn
 from transformers.models.bert.modeling_bert import BertModel
 
 
+
 class ACDModelWithPrompt(nn.Module):
     def __init__(self, args):
         super(ACDModelWithPrompt, self).__init__()
@@ -11,22 +12,19 @@ class ACDModelWithPrompt(nn.Module):
         self.bert = BertModel.from_pretrained(pretrained_model_name_or_path=args.model.model_name_or_path,
                                               output_attentions=args.model.output_attentions,
                                               output_hidden_states=args.model.output_hidden_states)
-        #self.fc = nn.Linear(args.model.bert_hidden_size, args.model.num_class)
+        self.fc = nn.Linear(args.model.bert_hidden_size, args.model.num_class)
         # 获取Bert模型的嵌入层，用于处理输入文本的嵌入表示
         self.embeddings = self.bert.embeddings
         # 创建一个Dropout层，用于在模型训练时进行随机失活
         self.dropout = nn.Dropout(args.model.hidden_dropout_prob)
-
         self.softmax = nn.Softmax(dim=-1)
-        self.loss_fn = nn.CrossEntropyLoss()
+        self.loss_fct = nn.BCEWithLogitsLoss()
 
         for param in self.bert.parameters():
             param.requires_grad = False
 
         # 从config中获取预设序列长度等信息
         self.pre_seq_len = args.model.pre_seq_len
-
-        
         # 创建一个表示提示令牌的张量
         self.prefix_tokens = torch.arange(self.args.model.pre_seq_len).long()
         # 创建一个嵌入层，用于将提示令牌嵌入到指定的隐藏维度中
@@ -65,16 +63,11 @@ class ACDModelWithPrompt(nn.Module):
         # 将提示的注意力掩码与输入文本的注意力掩码连接在一起
         input_mask = torch.cat((prefix_attention_mask, input_mask), dim=1)
 
-        # bert_output = self.bert(input_ids=input_ids,
-        #                         attention_mask=input_mask,
-        #                         token_type_ids=segment_ids,
-        #                         inputs_embeds=inputs_embeds)
         outputs = self.bert(
             attention_mask=input_mask,
             inputs_embeds=inputs_embeds,
             output_attentions=output_attentions,
-            output_hidden_states=output_hidden_states,
-            
+            output_hidden_states=output_hidden_states,           
         )
         # 获取Bert模型的序列输出
         sequence_output = outputs[0]
@@ -89,12 +82,13 @@ class ACDModelWithPrompt(nn.Module):
         # 应用Dropout以防止过拟合
         pooled_output = self.dropout(pooled_output)
         # 通过线性分类器生成分类的logits
-        # logits = self.classifier(pooled_output)
-        # output = self.fc(bert_output[1])
-        # output = self.dropout(output)
-        output = self.softmax(pooled_output)
+        output = self.fc(pooled_output)
+        output = self.softmax(output)
+        # 初始化损失值为None
+        loss = None
+
         if label is not None:
-            loss = self.loss_fn(output, label)
+            loss = self.loss_fct(output, label)
             return loss, output
 
         return output

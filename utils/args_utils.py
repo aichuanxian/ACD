@@ -33,7 +33,7 @@ class Arguments(object):
 
     def get_args(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument('--config', default='/root/02-ACD-Prompt_v1.0/configs/ACD-Prompt.json', help='Provide the JSON config path with the parameters of your experiment')
+        parser.add_argument('--config', default='/root/02-ACD-Prompt_v1.0/configs/ACD-baseline.json', help='Provide the JSON config path with the parameters of your experiment')
         parser.add_argument('--replicable', type=bool, default=True, help='')
         parser.add_argument('--is_cuda', type=bool, default=False, help='')
         parser.add_argument('--log_interval', type=int, default=10, help='')
@@ -113,7 +113,7 @@ class Arguments(object):
         print("[LOG] {: >15}: '{}'".format("Description", self.experiment.description))
         for key, val in vars(self.data.text).items():
             print("[LOG] {: >15}: {}".format(key, val))
-        print("[LOG] {: >15}: '{}'".format("Modeling", vars(self.model)))
-        print("[LOG] {: >15}: '{}'".format("Training", vars(self.training)))
+        print("[LOG] {: >15}: '{}'".format("Modeling", self.model.name))
+        #print("[LOG] {: >15}: '{}'".format("Training", vars(self.training)))
         #print("[LOG] {: >15}: '{}'".format("GPUs avaliable", self.optim.n_gpu))
         print("[LOG] {}".format('=' * 80))

@@ -20,10 +20,9 @@ class ACDModel(nn.Module):
                                 token_type_ids=segment_ids)
         output = self.fc(bert_output[1])
         output = self.softmax(output)
+
         if label is not None:
             loss = self.loss_fn(output, label)
             return loss, output
 
         return output
-
-
