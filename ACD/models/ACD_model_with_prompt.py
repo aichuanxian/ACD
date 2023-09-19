@@ -37,7 +37,17 @@ class ACDModelWithPrompt(nn.Module):
         prompts = self.prefix_encoder(prefix_tokens)
         return prompts
 
-    def forward(self, input_ids, input_mask, segment_ids, label=None, inputs_embeds=None, position_ids=None, token_type_ids=None):
+    def forward(
+        self, 
+        input_ids, 
+        input_mask, 
+        segment_ids, 
+        label=None, 
+        inputs_embeds=None, 
+        position_ids=None, 
+        token_type_ids=None, 
+        output_attentions=None,
+        output_hidden_states=None,):
         # 获取输入的batch_size
         batch_size = input_ids.shape[0]
         # 使用嵌入层处理原始输入文本，生成嵌入表示
@@ -55,12 +65,19 @@ class ACDModelWithPrompt(nn.Module):
         # 将提示的注意力掩码与输入文本的注意力掩码连接在一起
         input_mask = torch.cat((prefix_attention_mask, input_mask), dim=1)
 
-        bert_output = self.bert(input_ids=input_ids,
-                                attention_mask=input_mask,
-                                token_type_ids=segment_ids,
-                                inputs_embeds=inputs_embeds)
+        # bert_output = self.bert(input_ids=input_ids,
+        #                         attention_mask=input_mask,
+        #                         token_type_ids=segment_ids,
+        #                         inputs_embeds=inputs_embeds)
+        outputs = self.bert(
+            attention_mask=input_mask,
+            inputs_embeds=inputs_embeds,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            
+        )
         # 获取Bert模型的序列输出
-        sequence_output = bert_output[0]
+        sequence_output = outputs[0]
         # 截取序列输出，去掉提示部分
         sequence_output = sequence_output[:, self.pre_seq_len:, :].contiguous()
         # 获取序列输出的第一个令牌
