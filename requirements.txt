@@ -1,0 +1,41 @@
+astroid @ file:///home/conda/feedstock_root/build_artifacts/astroid_1688921185846/work
+certifi==2021.5.30
+charset-normalizer==2.0.6
+colorama==0.4.5
+dill @ file:///home/conda/feedstock_root/build_artifacts/dill_1690101045195/work
+et-xmlfile==1.1.0
+filelock==3.8.0
+huggingface-hub==0.9.1
+idna==3.2
+isort @ file:///home/conda/feedstock_root/build_artifacts/isort_1675033873689/work
+jieba==0.42.1
+joblib==1.2.0
+lazy-object-proxy @ file:///tmp/build/80754af9/lazy-object-proxy_1616529027849/work
+mccabe @ file:///home/conda/feedstock_root/build_artifacts/mccabe_1643049622439/work
+numpy==1.23.3
+openpyxl==3.0.10
+packaging==21.3
+pandas==1.4.4
+platformdirs @ file:///home/conda/feedstock_root/build_artifacts/platformdirs_1690813113769/work
+pylint @ file:///home/conda/feedstock_root/build_artifacts/pylint_1690375221593/work
+pyparsing==3.0.9
+python-dateutil==2.8.2
+pytz==2022.2.1
+PyYAML==6.0
+regex==2022.9.13
+requests==2.26.0
+scikit-learn==1.1.2
+scipy==1.9.1
+six==1.16.0
+sklearn==0.0
+threadpoolctl==3.1.0
+tokenizers==0.12.1
+tomli @ file:///home/conda/feedstock_root/build_artifacts/tomli_1644342247877/work
+tomlkit @ file:///home/conda/feedstock_root/build_artifacts/tomlkit_1690472772788/work
+torch==1.8.1
+tqdm==4.64.1
+transformers==4.22.1
+typing_extensions==4.3.0
+urllib3==1.26.7
+wrapt @ file:///home/conda/feedstock_root/build_artifacts/wrapt_1610094886776/work
+xlrd==2.0.1
