@@ -18,7 +18,7 @@ class ACDModelWithPrompt(nn.Module):
         # 创建一个Dropout层，用于在模型训练时进行随机失活
         self.dropout = nn.Dropout(args.model.hidden_dropout_prob)
         self.softmax = nn.Softmax(dim=-1)
-        self.loss_fct = nn.BCEWithLogitsLoss()
+        self.loss_fct = nn.CrossEntropyLoss()
 
         for param in self.bert.parameters():
             param.requires_grad = False

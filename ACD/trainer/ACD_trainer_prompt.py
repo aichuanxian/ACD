@@ -61,7 +61,7 @@ class ACDPromptTrainer(TrainerBase):
             batch_input_mask = batch_data['input_mask'].cuda() if self.is_cuda else batch_data['input_mask']
             batch_segment_ids = batch_data['segment_ids'].cuda() if self.is_cuda else batch_data['segment_ids']
             batch_label_ids = batch_data['label_ids'].cuda() if self.is_cuda else batch_data['label_ids']
-            print(f'label_shape:{batch_label_ids.shape}')
+            #print(f'label_shape:{batch_label_ids.shape}')
             loss, output = self.models(input_ids=batch_input_ids,
                                        input_mask=batch_input_mask,
                                        segment_ids=batch_segment_ids,
