@@ -75,6 +75,7 @@ class ACDModelWithPrompt(nn.Module):
         sequence_output = sequence_output[:, self.pre_seq_len:, :].contiguous()
         # 获取序列输出的第一个令牌
         first_token_tensor = sequence_output[:, 0]
+
         # 通过一个线性层将第一个令牌的表示映射为池化输出
         pooled_output = self.bert.pooler.dense(first_token_tensor)
         # 应用激活函数到池化输出
@@ -83,6 +84,8 @@ class ACDModelWithPrompt(nn.Module):
         pooled_output = self.dropout(pooled_output)
         # 通过线性分类器生成分类的logits
         output = self.fc(pooled_output)
+
+        #output = self.fc(first_token_tensor)
         output = self.softmax(output)
         # 初始化损失值为None
         loss = None

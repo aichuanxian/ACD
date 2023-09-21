@@ -10,12 +10,12 @@
         "directory": "/root/02-ACD-Prompt_v1.0/data",
         "dataset_class": "ACD",
         "text": {
-            "train": "train/train.txt",
+            "train": "train/train-10.txt",
             "valid": "dev/valid.txt",
             "test": "test/test.txt"
         },
         "label": {
-            "train": "train/train_label.txt",
+            "train": "train/train_label-10.txt",
             "valid": "dev/valid_label.txt",
             "test": "test/test_label.txt"
         },

@@ -11,6 +11,7 @@ class ACDModel(nn.Module):
                                               output_attentions=args.model.output_attentions,
                                               output_hidden_states=args.model.output_hidden_states)
         self.fc = nn.Linear(args.model.bert_hidden_size, args.model.num_class)
+        self.dropout = nn.Dropout(args.model.hidden_dropout_prob)
         self.softmax = nn.Softmax(dim=-1)
         self.loss_fn = nn.CrossEntropyLoss()
 
@@ -18,8 +19,20 @@ class ACDModel(nn.Module):
         bert_output = self.bert(input_ids=input_ids,
                                 attention_mask=input_mask,
                                 token_type_ids=segment_ids)
-        output = self.fc(bert_output[1])
+        
+        sequence_output = bert_output[1]
+        # 通过一个线性层将第一个令牌的表示映射为池化输出
+        pooled_output = self.bert.pooler.dense(sequence_output)
+        # 应用激活函数到池化输出
+        pooled_output = self.bert.pooler.activation(pooled_output)
+        # 应用Dropout以防止过拟合
+        pooled_output = self.dropout(pooled_output)
+        # 通过线性分类器生成分类的logits
+        output = self.fc(pooled_output)
+
+        #output = self.fc(bert_output[1])
         output = self.softmax(output)
+        loss = None
 
         if label is not None:
             loss = self.loss_fn(output, label)
