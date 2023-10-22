@@ -12,6 +12,7 @@ from transformers import get_linear_schedule_with_warmup
 import torch.optim as optim
 
 from ACD.models.ACD_model_with_prompt import ACDModelWithPrompt
+from ACD.models.ACD_model_with_combined_prompt import ACDModelWithCombinedPrompt
 from ACD.dataset.ACD_data_module import ACDDataModule
 
 
@@ -20,6 +21,7 @@ class ACDPromptTrainer(TrainerBase):
         super(ACDPromptTrainer, self).__init__(args)
         self.args = args
         self.datamodule = ACDDataModule(args)
+        #self.models = ACDModelWithCombinedPrompt(args).cuda() if self.is_cuda else ACDModelWithCombinedPrompt(args)
         self.models = ACDModelWithPrompt(args).cuda() if self.is_cuda else ACDModelWithPrompt(args)
         self._initial_optimizer_schedule()
 
@@ -116,6 +118,7 @@ class ACDPromptTrainer(TrainerBase):
                         pred.cpu().numpy(),
                     )
                 )
+        # print(rows)
         self.models.train()
 
         return eval_loss / len(dataloader), \
@@ -165,5 +168,5 @@ class ACDPromptTrainer(TrainerBase):
             final_macro_f1 = f1_score(
                 results.label, results.prediction, average="macro"
             )
-            print('Final acc {:5.4f} | Final Macro F1 {:5.4f}'.format(final_acc, final_macro_f1))
+            print('Final acc {:5.4f} | Final Macro F1 {:5.4f} | Final Loss {:5.4f}'.format(final_acc, final_macro_f1, final_loss))
             print('sssssssss')

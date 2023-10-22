@@ -1,10 +1,17 @@
 import os
 
 
-def load_datas(args):
+def load_datas(args, flag):
 
-    input_path = args.data.text.train
-    label_path = args.data.text.train_label
+    if flag == 'train':
+        input_path = args.data.text.train
+        label_path = args.data.text.train_label
+    elif flag == 'valid':
+        input_path = args.data.text.valid
+        label_path = args.data.text.valid_label
+    elif flag == 'test':
+        input_path = args.data.text.test
+        label_path = args.data.text.test_label
 
     with open(input_path, 'r', encoding='utf-8') as f:
         datas = f.readlines()

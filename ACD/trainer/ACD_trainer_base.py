@@ -66,6 +66,7 @@ class ACDTrainer(TrainerBase):
                                        input_mask=batch_input_mask,
                                        segment_ids=batch_segment_ids,
                                        label=batch_label_ids)
+
             _, pred = torch.max(output, dim=-1)
             total_correct += torch.sum(pred == batch_label_ids).item()
             if step % self.args.training.optim.gradient_accumulation_steps > 1:
@@ -116,6 +117,8 @@ class ACDTrainer(TrainerBase):
                         pred.cpu().numpy(),
                     )
                 )
+
+        # print(rows)
         self.models.train()
 
         return eval_loss / len(dataloader), \
@@ -161,9 +164,9 @@ class ACDTrainer(TrainerBase):
         if patience <= 0:
             print(f"Don't have the patience, break!!!")
             self.model = load_model(self.args)
-            final_acc, final_loss, results = self.do_evaluate(test_flag=True)
+            final_loss, final_acc, results = self.do_evaluate(test_flag=True)
             final_macro_f1 = f1_score(
                 results.label, results.prediction, average="macro"
             )
-            print('Final acc {:5.4f} | Final Macro F1 {:5.4f}'.format(final_acc, final_macro_f1))
+            print('Final acc {:5.4f} | Final Macro F1 {:5.4f}'.format(final_acc, final_macro_f1))         
             print('sssssssss')

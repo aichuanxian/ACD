@@ -18,9 +18,9 @@ class ACDDataModule(object):
         return self.datasets.get(flag, None)
 
     # def load_dataset(self, flag='train'):
-    #     dataset = BertClassDataset(self.args, self.tokenizer, flag)
+    #     dataset = ACDDataset(self.args, self.tokenizer, flag)
         
-    #     self.datasets[flag] = dataset.truncate(max_length=self.args.max_sequence_length)
+    #     self.datasets[flag] = dataset.truncate(max_length=self.args.model.max_seq_length)
 
     #     if flag == 'train':
     #         self.num_train_steps = int(len(self.datasets[flag].all_token_ids)
@@ -30,6 +30,7 @@ class ACDDataModule(object):
 
     def load_dataset(self, flag = 'train'):
         dataset = ACDDataset(self.args, self.tokenizer, flag)
+        # self.datasets[flag] = dataset.truncate(max_length=self.args.model.max_seq_length)
         self.datasets[flag] = dataset
 
         if flag == 'train':
@@ -37,7 +38,7 @@ class ACDDataModule(object):
                                        /self.args.training.per_gpu_train_batch_size
                                        / self.args.training.optim.gradient_accumulation_steps
                                        * self.args.training.epochs)
-                                       
+                                      
     def get_dataloader(self, dataset):
         if dataset in self.dataset_to_iter:
             return self.dataset_to_iter[dataset]

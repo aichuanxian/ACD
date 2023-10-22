@@ -17,6 +17,6 @@ if __name__ == '__main__':
         my_trainer = ACDPromptTrainer(args)
 
     my_trainer.do_train()
-    avg_ckpt(args.experiment.input_ckpt_path, args.experiment.output_ckpt, args.experiment.num_epoch_checkpoints)
-    my_trainer.do_test()
+    #avg_ckpt(args.experiment.input_ckpt_path, args.experiment.output_ckpt, args.experiment.num_epoch_checkpoints)
+    #my_trainer.do_test()
     
