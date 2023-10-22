@@ -38,7 +38,7 @@
     "training": {
         "epochs": 30,
         "patience": 10,
-        "per_gpu_train_batch_size": 25,
+        "per_gpu_train_batch_size": 16,
         "per_gpu_eval_batch_size": 25,
         "optim": {
             "learning_rate": 5e-5,
