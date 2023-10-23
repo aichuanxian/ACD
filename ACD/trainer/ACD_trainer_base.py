@@ -127,7 +127,7 @@ class ACDTrainer(TrainerBase):
 
     def do_test(self):
         self.model = load_model(self.args)
-        final_acc, final_loss, results = self.do_evaluate(test_flag=True)
+        final_loss, final_acc, results = self.do_evaluate(test_flag=True)
         final_macro_f1 = f1_score(
             results.label, results.prediction, average="macro"
         )
@@ -160,6 +160,7 @@ class ACDTrainer(TrainerBase):
                 save_model(self.models, self.args.model.model_save_path)
             else:
                 patience -= 1
+                print(patience)
 
         if patience <= 0:
             print(f"Don't have the patience, break!!!")
