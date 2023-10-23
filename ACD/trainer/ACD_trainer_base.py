@@ -131,8 +131,8 @@ class ACDTrainer(TrainerBase):
         final_macro_f1 = f1_score(
             results.label, results.prediction, average="macro"
         )
-        print('Final acc {:5.4f} | Final Macro F1 {:5.4f}'.format(final_acc, final_macro_f1))
-        print('sssssssss')
+        print('Test acc {:5.4f} | Test Macro F1 {:5.4f}'.format(final_acc, final_macro_f1))
+        print('testtttttttt')
 
     def do_train(self):
         assert self.optimizer is not None
@@ -169,4 +169,4 @@ class ACDTrainer(TrainerBase):
                 results.label, results.prediction, average="macro"
             )
             print('Final acc {:5.4f} | Final Macro F1 {:5.4f}'.format(final_acc, final_macro_f1))         
-            print('sssssssss')
+            print('Validdddddd')
