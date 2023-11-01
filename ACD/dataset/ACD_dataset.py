@@ -21,7 +21,7 @@ class ACDDataset(Dataset):
         self.all_input_text = []  # Initialize all_input_text
         self.all_labels = []  # Initialize all_labels
         self.all_attention_mask = [0] * len(self.all_token_ids)   # Initialize all_attention_mask
-        print(type(self.all_attention_mask))
+        # print(type(self.all_attention_mask))
         # self.all_attention_mask = []
 
     def __len__(self):
@@ -42,10 +42,16 @@ class ACDDataset(Dataset):
         return tmp
 
     def collate_fn(self, samples, pad_token=0, default_max_len = 512):
-        batch_input_ids = [s['input_ids'][0:default_max_len] for s in samples]
-        batch_input_mask = [s['input_mask'][0:default_max_len] for s in samples]
-        batch_segment_ids = [s['segment_ids'][0:default_max_len] for s in samples]
-        batch_label_ids = [s['label_ids'] for s in samples]
+        if self.args.experiment.with_prompt:
+            batch_input_ids = [s['input_ids'][0:default_max_len-self.args.model.pre_seq_len] for s in samples]
+            batch_input_mask = [s['input_mask'][0:default_max_len-self.args.model.pre_seq_len] for s in samples]
+            batch_segment_ids = [s['segment_ids'][0:default_max_len-self.args.model.pre_seq_len] for s in samples]
+            batch_label_ids = [s['label_ids'] for s in samples]
+        else:
+            batch_input_ids = [s['input_ids'][0:default_max_len] for s in samples]
+            batch_input_mask = [s['input_mask'][0:default_max_len] for s in samples]
+            batch_segment_ids = [s['segment_ids'][0:default_max_len] for s in samples]
+            batch_label_ids = [s['label_ids'] for s in samples]           
 
         max_len = max([len(s) for s in batch_input_ids])
         p_input_ids, p_input_mask, p_segment_ids = [], [], []

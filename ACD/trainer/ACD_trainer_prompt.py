@@ -80,7 +80,7 @@ class ACDPromptTrainer(TrainerBase):
                 self.scheduler.step()
                 self.optimizer.zero_grad()
 
-        print('Epoch {:2d} | Train Loss {:5.4f} | Acc {:5.4f}'.format(epoch,
+        print('Epoch {:2d} | Train Loss {:5.4f} |Train Acc {:5.4f}'.format(epoch,
                                                                       train_loss / len(train_loader),
                                                                       total_correct / len(train_loader.dataset.inputs)))
 
@@ -127,12 +127,12 @@ class ACDPromptTrainer(TrainerBase):
 
     def do_test(self):
         self.model = load_model(self.args)
-        final_acc, final_loss, results = self.do_evaluate(test_flag=True)
+        final_loss, final_acc, results = self.do_evaluate(test_flag=True)
         final_macro_f1 = f1_score(
             results.label, results.prediction, average="macro"
         )
-        print('Final acc {:5.4f} | Final Macro F1 {:5.4f}'.format(final_acc, final_macro_f1))
-        print('sssssssss')
+        print('Test acc {:5.4f} | Test Macro F1 {:5.4f}'.format(final_acc, final_macro_f1))
+        print('testtttttttt')
 
     def do_train(self):
         assert self.optimizer is not None
@@ -160,13 +160,14 @@ class ACDPromptTrainer(TrainerBase):
                 save_model(self.models, self.args.model.model_save_path)
             else:
                 patience -= 1
+                print(patience)
 
-        if patience <= 0:
-            print(f"Don't have the patience, break!!!")
-            self.model = load_model(self.args)
-            final_acc, final_loss, results = self.do_evaluate(test_flag=True)
-            final_macro_f1 = f1_score(
-                results.label, results.prediction, average="macro"
-            )
-            print('Final acc {:5.4f} | Final Macro F1 {:5.4f} | Final Loss {:5.4f}'.format(final_acc, final_macro_f1, final_loss))
-            print('sssssssss')
+            if patience <= 0:
+                print(f"Don't have the patience, break!!!")
+                self.model = load_model(self.args)
+                final_loss, final_acc, results = self.do_evaluate(test_flag=True)
+                final_macro_f1 = f1_score(
+                    results.label, results.prediction, average="macro"
+                )
+                print('Final acc {:5.4f} | Final Macro F1 {:5.4f} | Final Loss {:5.4f}'.format(final_acc, final_macro_f1, final_loss))
+                print('Validdddddd')

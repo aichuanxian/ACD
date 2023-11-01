@@ -57,12 +57,14 @@ class ACDModelWithPrompt(nn.Module):
         # 调用get_prompt方法获取提示的嵌入表示
         prompts = self.get_prompt(batch_size=batch_size)
         # 将提示的嵌入表示与原始嵌入表示连接在一起，形成最终的输入嵌入表示
-        #inputs_embeds = torch.cat((prompts, raw_embedding), dim=1)
-        inputs_embeds = torch.cat((raw_embedding, prompts), dim=1)
+        inputs_embeds = torch.cat((prompts, raw_embedding), dim=1)
+        # inputs_embeds = torch.cat((raw_embedding, prompts), dim=1)
         # 创建一个与提示令牌对应的注意力掩码
         prefix_attention_mask = torch.ones(batch_size, self.pre_seq_len).to(self.bert.device)
         # 将提示的注意力掩码与输入文本的注意力掩码连接在一起
         input_mask = torch.cat((prefix_attention_mask, input_mask), dim=1)
+        # print(f'input_mask:{input_mask.shape}')
+        # print(f'inputs_embeds:{inputs_embeds.shape}')
 
         outputs = self.bert(
             attention_mask=input_mask,

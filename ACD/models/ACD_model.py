@@ -15,6 +15,9 @@ class ACDModel(nn.Module):
         self.softmax = nn.Softmax(dim=-1)
         self.loss_fn = nn.CrossEntropyLoss()
 
+        for param in self.bert.parameters():
+            param.requires_grad = False
+
     def forward(self, input_ids, input_mask, segment_ids, label=None):
         bert_output = self.bert(input_ids=input_ids,
                                 attention_mask=input_mask,

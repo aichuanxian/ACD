@@ -5,20 +5,21 @@
        "do_training": true,
        "output_dir": "results",
        "taskname": "ACD_base",
-       "input_ckpt_path": "",
-       "output_ckpt": "",
-       "num_epoch_checkpoints": ""
+       "input_ckpt_path": "/root/02-ACD-Prompt_v1.0/ckpt/",
+       "output_ckpt": "/root/02-ACD-Prompt_v1.0/ckpt/output_ckpt",
+       "num_epoch_checkpoints": 3,
+       "with_prompt": false
     },
     "data": {
         "directory": "/root/02-ACD-Prompt_v1.0/data",
         "dataset_class": "ACD",
         "text": {
-            "train": "train/train-all.txt",
+            "train": "train/train-0.1.txt",
             "valid": "dev/valid.txt",
             "test": "test/test.txt"
         },
         "label": {
-            "train": "train/train_label-all.txt",
+            "train": "train/train_label-0.1.txt",
             "valid": "dev/valid_label.txt",
             "test": "test/test_label.txt"
         }
@@ -26,7 +27,7 @@
     "model": {
         "name": "ACD",
         "model_name_or_path": "/root/02-ACD-Prompt_v1.0/bert-base-chinese",
-        "model_save_path":"ckpt/",
+        "model_save_path":"/root/02-ACD-Prompt_v1.0/ckpt/",
         "pretrained_weights": null,
         "do_lower_case": true,
         "output_attentions": false,
@@ -38,7 +39,7 @@
         "max_seq_length": 512
     },
     "training": {
-        "epochs": 50,
+        "epochs": 30,
         "patience": 10,
         "per_gpu_train_batch_size": 32,
         "per_gpu_eval_batch_size": 32,

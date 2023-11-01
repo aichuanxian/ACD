@@ -33,7 +33,7 @@ class Arguments(object):
 
     def get_args(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument('--config', default='/root/02-ACD-Prompt_v1.0/configs/ACD-baseline.json', help='Provide the JSON config path with the parameters of your experiment')
+        parser.add_argument('--config', default='/root/02-ACD-Prompt_v1.0/configs/ACD-prompt.json', help='Provide the JSON config path with the parameters of your experiment')
         parser.add_argument('--replicable', type=bool, default=True, help='')
         parser.add_argument('--is_cuda', type=bool, default=False, help='')
         parser.add_argument('--log_interval', type=int, default=10, help='')
@@ -53,17 +53,6 @@ class Arguments(object):
         self.data.text.valid_label = os.path.join(self.data.directory, self.data.label.valid)
         self.data.text.test_label = os.path.join(self.data.directory, self.data.label.test)
 
-        # if self.data.image.train is not None:
-        #     self.data.image.train = os.path.join(self.data.directory, self.data.image.train)
-        #     self.data.image.valid = os.path.join(self.data.directory, self.data.image.valid)
-        #     self.data.image.test = os.path.join(self.data.directory, self.data.image.test)
-        #
-        # if self.data.caption.train is not None:
-        #     self.data.caption.train = os.path.join(self.data.directory, self.data.caption.train)
-        #     self.data.caption.dev = os.path.join(self.data.directory, self.data.caption.dev)
-        #     self.data.caption.test = os.path.join(self.data.directory, self.data.caption.test)
-
-
     def _add_extra_fields(self):
         # self.experiment.output_dir = os.path.join(glb.PROJ_DIR, self.experiment.output_dir, self.experiment.id)
         self.experiment.output_dir = self.experiment.output_dir, self.experiment.id
@@ -72,13 +61,14 @@ class Arguments(object):
 
     def _read_json_params(self):
         # Read the parameters from the JSON file and skip comments
-        # with open(self.args.config, 'r') as f:
-        #     params = ''.join([re.sub(r"//.*$", "", line, flags=re.M) for line in f])
-        #
-        # arguments = json.loads(params, object_hook=lambda d: Namespace(**d))
         with open(self.args.config, 'r') as f:
-            arguments = json.load(f, object_hook=lambda d: Namespace(**d))
-        print(arguments)
+            params = ''.join([re.sub(r"//.*$", "", line, flags=re.M) for line in f])
+        
+        arguments = json.loads(params, object_hook=lambda d: Namespace(**d))
+
+        # with open(self.args.config, 'r') as f:
+        #     arguments = json.load(f, object_hook=lambda d: Namespace(**d))
+        # print(arguments)
 
         # Must-have fields expected from the JSON config file
         self.experiment = arguments.experiment

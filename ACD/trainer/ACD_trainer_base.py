@@ -48,8 +48,8 @@ class ACDTrainer(TrainerBase):
                                                          num_warmup_steps=self.args.training.optim.warmup_steps,
                                                          num_training_steps=self.datamodule.num_train_steps)
 
-    # def _init_optimizer(self):
-    #     self.optimizer = AdamW(self.models.parameters(), lr=self.args.lr)
+    def _init_optimizer(self):
+        self.optimizer = AdamW(self.models.parameters(), lr=self.args.lr)
 
     def train_epoch(self, epoch):
         self.models.train()
@@ -79,7 +79,7 @@ class ACDTrainer(TrainerBase):
                 self.scheduler.step()
                 self.optimizer.zero_grad()
 
-        print('Epoch {:2d} | Train Loss {:5.4f} | Acc {:5.4f}'.format(epoch,
+        print('Epoch {:2d} | Train Loss {:5.4f} |Train Acc {:5.4f}'.format(epoch,
                                                                       train_loss / len(train_loader),
                                                                       total_correct / len(train_loader.dataset.inputs)))
 
