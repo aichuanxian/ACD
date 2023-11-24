@@ -7,12 +7,6 @@ def build_model(args):
     model_name = args.model.name
     config = prepare_model_config(args)
 
-    # if model_name == 'ner':
-    #     print('Unsupport model...')
-    #     model_class = NERModel(config)
-    # elif model_name == 'ner_with_caption':
-    #     model_class = NERWithCaption(config)
-    # elif model_name == 'mner':
     if model_name == 'ACD':
         # model_class = VisualBertModel(config)
         model_class = ACDModel(args, config)
@@ -32,8 +26,6 @@ def prepare_model_config(args):
     config.num_labels = len(args.data.label_scheme)
     config.output_attentions = args.model.output_attentions
     config.output_hidden_states = args.model.output_hidden_states
-    config.visual_embedding_dim = args.data.image.embedding_dim
-    config.visual_embedding_size = args.data.image.size
     config.ckpt_path = args.model.pretrained_weights
 
     return config

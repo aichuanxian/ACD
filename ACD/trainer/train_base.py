@@ -9,7 +9,7 @@ class TrainerBase(object):
 
     def _init_parameters(self):
         self.is_cuda = self.args.args.is_cuda
-        self.patience = self.args.args.patience
+        self.patience = self.args.training.patience
         self.best_valid_loss = 1e8
         self.best_valid_acc = 0
 

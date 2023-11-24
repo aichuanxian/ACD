@@ -37,7 +37,6 @@ class Arguments(object):
         parser.add_argument('--replicable', type=bool, default=True, help='')
         parser.add_argument('--is_cuda', type=bool, default=False, help='')
         parser.add_argument('--log_interval', type=int, default=10, help='')
-        parser.add_argument('--patience', type=int, default=10)
 
         return parser.parse_args()
 
