@@ -15,8 +15,13 @@ class ACDModelWithPrompt(nn.Module):
         self.softmax = nn.Softmax(dim=-1)
         self.loss_fct = nn.CrossEntropyLoss()
 
-        for param in self.bert.parameters():
-            param.requires_grad = False
+        if args.experiment.with_parameter_freeze:
+            print(f'param.requires_grad:{args.experiment.with_parameter_freeze}')
+            for param in self.bert.parameters():
+                param.requires_grad = False
+        else:
+            for param in self.bert.parameters():
+            param.requires_grad = True
 
         self.pre_seq_len = args.model.pre_seq_len
         self.prefix_tokens = torch.arange(self.args.model.pre_seq_len).long()
@@ -39,7 +44,7 @@ class ACDModelWithPrompt(nn.Module):
         position_ids=None, 
         token_type_ids=None, 
         output_attentions=None,
-        output_hidden_states=None,):
+        output_hidden_states=None):
 
         batch_size = input_ids.shape[0]
         raw_embedding = self.embeddings(
@@ -68,7 +73,6 @@ class ACDModelWithPrompt(nn.Module):
         pooled_output = self.bert.pooler.activation(pooled_output)
         pooled_output = self.dropout(pooled_output)
         output = self.fc(pooled_output)
-        print(output)
         #output = self.fc(first_token_tensor)
         output = self.softmax(output)
         loss = None

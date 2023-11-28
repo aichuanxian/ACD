@@ -1,13 +1,13 @@
-# Can images help recognize entities? A study of the role of images for Multimodal NER
-<p align="right"><i>Authors: Shuguang Chen, Gustavo Aguilar, Leonardo Neves and Thamar Solorio</i></p> 
+# ACD
+<p align="right"><i>Authors: Pitts</i></p> 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 
-This repository contains the implementations of the system described in the paper ["Can images help recognize entities? A study of the role of images for Multimodal NER"]() on [The 7th Workshop on Noisy User-generated Text (W-NUT)](http://noisy-text.github.io/2021/) at the [EMNLP 2021](https://2021.emnlp.org) conference.
+This repository contains the implementations of the system described in the paper ["XXX"]() on [XXX](http://noisy-text.github.io/2021/) at the [XXX](https://2021.emnlp.org) conference.
 
 ## Repository Structure
 ```
-multimodal_NER
+ACD
 └── src
     ├── commons
     │   ├── globals.py
@@ -23,12 +23,14 @@ multimodal_NER
 ```
 
 ## Installation
-We have updated the code to work with Python 3.9, Pytorch 1.9, and CUDA 11.2. If you use conda, you can set up the environment as follows:
+We have updated the code to work with Python 3.10, Pytorch 2.0.1, and CUDA 11.7. If you use conda, you can set up the environment as follows:
 
 ```bash
-conda create -n multimodal_NER python==3.8
-conda activate multimodal_NER
-conda install pytorch==1.9 cudatoolkit=11.2 -c pytorch
+conda create -n ACD python==3.10
+conda activate ACD
+conda install pytorch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2 pytorch-cuda=11.7 -c pytorch -c nvidia
+conda install -y transformers tqdm matplotlib pandas pylint
+conda install -c conda-forge sklearn-contrib-lightning
 ```
 
 Also, install the dependencies specified in the requirements.txt:
@@ -40,15 +42,8 @@ pip install -r requirements.txt
 In this repository, we provide some toy examples to play with the code. Due to the policy, we are not allowed to release the data. If you need, please email Shuguang Chen ([schen52@uh.edu](schen52@uh.edu)) and we will provide the following data:
 
 ```
-1. original twitter text
-2. associated images
-3. associated image captions
+XXX
 ```
-
-<u>Image feature extraction</u>:
-- Global image features: you can use the script under `src/data/global_image_feature_extraction` for extract image features from VGG16 or ResNet152.
-- Regional image features: we provide the script under `src/data/regional_image_feature_extraction`. Please follow the instructions in [VisualBERT](https://github.com/uclanlp/visualbert/tree/master/visualbert) for extracting features for image objects.
-
 
 
 ## Running

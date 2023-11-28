@@ -8,6 +8,7 @@ from scripts.checkpoint import avg_ckpt
 if __name__ == '__main__':
     args = Arguments()
 
+    print(f'torch.cuda.is_available:{torch.cuda.is_available()}')
     if torch.cuda.is_available():
         args.args.is_cuda = True
 
