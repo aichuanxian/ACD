@@ -13,7 +13,6 @@ from utils.plot_utils import use_svg_display,set_axes,set_figsize,plot
 
 from ACD.trainer.train_base import TrainerBase
 from ACD.models.ACD_model_with_prompt import ACDModelWithPrompt
-from ACD.models.ACD_model_with_combined_prompt import ACDModelWithCombinedPrompt
 from ACD.dataset.ACD_data_module import ACDDataModule
 
 
@@ -62,7 +61,7 @@ class ACDPromptTrainer(TrainerBase):
             batch_input_mask = batch_data['input_mask'].cuda() if self.is_cuda else batch_data['input_mask']
             batch_segment_ids = batch_data['segment_ids'].cuda() if self.is_cuda else batch_data['segment_ids']
             batch_label_ids = batch_data['label_ids'].cuda() if self.is_cuda else batch_data['label_ids']
-            # print(f'label_shape:{batch_label_ids.shape}')
+
             loss, output = self.models(input_ids=batch_input_ids,
                                        input_mask=batch_input_mask,
                                        segment_ids=batch_segment_ids,
@@ -101,8 +100,7 @@ class ACDPromptTrainer(TrainerBase):
                 batch_input_ids = batch_data['input_ids'].cuda() if self.is_cuda else batch_data['input_ids']
                 batch_input_mask = batch_data['input_mask'].cuda() if self.is_cuda else batch_data['input_mask']
                 batch_segment_ids = batch_data['segment_ids'].cuda() if self.is_cuda else batch_data['segment_ids']
-                batch_label_ids = batch_data['label_ids'].cuda() if self.is_cuda else batch_data['label_ids']
-
+                batch_label_ids = batch_data['label_ids'].cuda() if self.is_cuda else batch_data['label_ids']  
                 loss, output = self.models(input_ids=batch_input_ids,
                                            input_mask=batch_input_mask,
                                            segment_ids=batch_segment_ids,
@@ -152,8 +150,8 @@ class ACDPromptTrainer(TrainerBase):
             result.append(results)
             
             duration = time.time() - start
-            model_name = 'model_' + str(epoch + 1)
-            save_model(self.models, self.args.model.model_save_path, model_name)
+            # model_name = 'model_' + str(epoch + 1)
+            # save_model(self.models, self.args.model.model_save_path, model_name)
 
             print('=' * 50)
             print('Epoch {:2d} | '

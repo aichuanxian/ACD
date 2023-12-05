@@ -35,7 +35,7 @@ conda install -c conda-forge sklearn-contrib-lightning
 
 Also, install the dependencies specified in the requirements.txt:
 ```
-pip install -r requirements.txt
+conda create --name <env> --file requirements.txt
 ```
 
 ## Data

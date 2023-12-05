@@ -11,7 +11,7 @@ class ACDModelWithPrompt(nn.Module):
                                               output_hidden_states=args.model.output_hidden_states)
         self.fc = nn.Linear(args.model.bert_hidden_size, args.model.num_class)
         self.embeddings = self.bert.embeddings
-        self.dropout = nn.Dropout(args.model.hidden_dropout_prob)
+        # self.dropout = nn.Dropout(args.model.hidden_dropout_prob)
         self.softmax = nn.Softmax(dim=-1)
         self.loss_fct = nn.CrossEntropyLoss()
 
@@ -20,8 +20,9 @@ class ACDModelWithPrompt(nn.Module):
             for param in self.bert.parameters():
                 param.requires_grad = False
         else:
+            print(f'param.requires_grad:{args.experiment.with_parameter_freeze}')
             for param in self.bert.parameters():
-            param.requires_grad = True
+                param.requires_grad = True
 
         self.pre_seq_len = args.model.pre_seq_len
         self.prefix_tokens = torch.arange(self.args.model.pre_seq_len).long()
@@ -54,7 +55,6 @@ class ACDModelWithPrompt(nn.Module):
         )
         prompts = self.get_prompt(batch_size=batch_size)
         inputs_embeds = torch.cat((prompts, raw_embedding), dim=1)
-        # inputs_embeds = torch.cat((raw_embedding, prompts), dim=1)
         prefix_attention_mask = torch.ones(batch_size, self.pre_seq_len).to(self.bert.device)
         input_mask = torch.cat((prefix_attention_mask, input_mask), dim=1)
         # print(f'input_mask:{input_mask.shape}')
@@ -71,7 +71,7 @@ class ACDModelWithPrompt(nn.Module):
 
         pooled_output = self.bert.pooler.dense(first_token_tensor)
         pooled_output = self.bert.pooler.activation(pooled_output)
-        pooled_output = self.dropout(pooled_output)
+        # pooled_output = self.dropout(pooled_output)
         output = self.fc(pooled_output)
         #output = self.fc(first_token_tensor)
         output = self.softmax(output)

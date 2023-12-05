@@ -1,28 +1,27 @@
 import time
-
 import torch
 import torch.nn as nn
 from tqdm import tqdm
 from sklearn.metrics import f1_score
-
-from ACD.trainer.train_base import TrainerBase
-from utils.model_utils import save_model, load_model
-from utils.metrics_utils import format_eval_output
-from utils.plot_utils import use_svg_display,set_axes,set_figsize,plot
 from transformers import get_linear_schedule_with_warmup
 import torch.optim as optim
 import numpy as np
 
-from ACD.models.ACD_model import ACDModel
+from utils.model_utils import save_model, load_model
+from utils.metrics_utils import format_eval_output
+from utils.plot_utils import use_svg_display,set_axes,set_figsize,plot
+
+from ACD.trainer.train_base import TrainerBase
+from ACD.models.ACD_model_with_prefix import ACDModelWithPrefix
 from ACD.dataset.ACD_data_module import ACDDataModule
 
 
-class ACDTrainer(TrainerBase):
+class ACDPrefixTrainer(TrainerBase):
     def __init__(self, args):
-        super(ACDTrainer, self).__init__(args)
+        super(ACDPrefixTrainer, self).__init__(args)
         self.args = args
         self.datamodule = ACDDataModule(args)
-        self.models = ACDModel(args).cuda() if self.is_cuda else ACDModel(args)
+        self.models = ACDModelWithPrefix(args).cuda() if self.is_cuda else ACDModelWithPrefix(args)
         self._initial_optimizer_schedule()
 
     def _initial_optimizer_schedule(self):
@@ -50,8 +49,6 @@ class ACDTrainer(TrainerBase):
                                                          num_warmup_steps=self.args.training.optim.warmup_steps,
                                                          num_training_steps=self.datamodule.num_train_steps)
 
-    def _init_optimizer(self):
-        self.optimizer = AdamW(self.models.parameters(), lr=self.args.lr)
 
     def train_epoch(self, epoch):
         self.models.train()
@@ -63,19 +60,25 @@ class ACDTrainer(TrainerBase):
             batch_input_mask = batch_data['input_mask'].cuda() if self.is_cuda else batch_data['input_mask']
             batch_segment_ids = batch_data['segment_ids'].cuda() if self.is_cuda else batch_data['segment_ids']
             batch_label_ids = batch_data['label_ids'].cuda() if self.is_cuda else batch_data['label_ids']
-            #print(f'label_shape:{batch_label_ids.shape}')
+            # print(f'label_shape:{batch_label_ids.shape}')
+            assert batch_input_mask.size(1) == batch_input_ids.size(1), "Mask length doesn't match input length"
+            print(f'batch_input_ids shape: {batch_input_ids.shape}\n\
+                    batch_input_mask shape: {batch_input_mask.shape}\n\
+                    batch_segment_ids shape: {batch_segment_ids.shape}\n\
+                    batch_label_ids shape: {batch_label_ids.shape}')
             loss, output = self.models(input_ids=batch_input_ids,
-                                       input_mask=batch_input_mask,
-                                       segment_ids=batch_segment_ids,
-                                       label=batch_label_ids)
-
+                                       attention_mask=batch_input_mask,
+                                       token_type_ids=batch_segment_ids,
+                                       labels=batch_label_ids)
             _, pred = torch.max(output, dim=-1)
+            # print(f'pred:{pred.shape}')
             total_correct += torch.sum(pred == batch_label_ids).item()
             if step % self.args.training.optim.gradient_accumulation_steps > 1:
                 loss = loss / self.args.training.optim.gradient_accumulation_steps
             train_loss += loss.item()
             loss.backward()
             nn.utils.clip_grad_norm_(self.models.parameters(), max_norm=self.args.training.optim.max_grad_norm)
+            # print('running')
             if step % self.args.training.optim.gradient_accumulation_steps == 0:
                 self.optimizer.step()
                 self.scheduler.step()
@@ -119,7 +122,6 @@ class ACDTrainer(TrainerBase):
                         pred.cpu().numpy(),
                     )
                 )
-
         # print(rows)
         self.models.train()
 
@@ -151,10 +153,10 @@ class ACDTrainer(TrainerBase):
             eval_losses.append(eval_loss)
             eval_accs.append(eval_acc)
             result.append(results)
-
+            
             duration = time.time() - start
-            model_name = 'model_' + str(epoch + 1)
-            #save_model(self.models, self.args.model.model_save_path, model_name)
+            # model_name = 'model_' + str(epoch + 1)
+            # save_model(self.models, self.args.model.model_save_path, model_name)
 
             print('=' * 50)
             print('Epoch {:2d} | '
@@ -174,17 +176,15 @@ class ACDTrainer(TrainerBase):
                 print(patience)
 
             if patience <= 0:
-                print(f"Early stopping")
-                
+                print(f"Early Break!")
                 break
 
-        # self.model = load_model(self.args.model.model_save_path)
         self.model = load_model(self.args)
         final_loss, final_acc, results = self.do_evaluate(test_flag=True)
         final_macro_f1 = f1_score(
             results.label, results.prediction, average="macro"
         )
-        print('Final acc {:5.4f} | Final Macro F1 {:5.4f}'.format(final_acc, final_macro_f1))         
+        print('Final acc {:5.4f} | Final Macro F1 {:5.4f} | Final Loss {:5.4f}'.format(final_acc, final_macro_f1, final_loss))
         print('Validdddddd')
 
         plot(np.arange(0, epoch + 1, 1), \

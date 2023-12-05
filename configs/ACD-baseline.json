@@ -9,18 +9,18 @@
        "output_ckpt": "/root/02-ACD-Prompt_v1.0/ckpt/output_ckpt",
        "num_epoch_checkpoints": 3,
        "with_prompt": false,
-       "with_parameter_freeze":true
+       "with_parameter_freeze":false
     },
     "data": {
         "directory": "/root/02-ACD-Prompt_v1.0/data",
         "dataset_class": "ACD",
         "text": {
-            "train": "train/train-all.txt",
+            "train": "train/train-10s.txt",
             "valid": "dev/valid.txt",
             "test": "test/test.txt"
         },
         "label": {
-            "train": "train/train_label-all.txt",
+            "train": "train/train_label-10s.txt",
             "valid": "dev/valid_label.txt",
             "test": "test/test_label.txt"
         }

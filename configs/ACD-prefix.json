@@ -4,29 +4,30 @@
        "description": "ACD on weibo-Convid19 dataset",
        "do_training": true,
        "output_dir": "results",
-       "taskname": "ACD_Prompt",
+       "taskname": "ACD_Prefix",
        "input_ckpt_path": "/root/02-ACD-Prompt_v1.0/ckpt/",
        "output_ckpt": "/root/02-ACD-Prompt_v1.0/ckpt/output_ckpt",
        "num_epoch_checkpoints": 3,
        "with_prompt": true,
-       "with_parameter_freeze":false
+       "with_parameter_freeze":false,
+       "prefix_projection": true
     },
     "data": {
         "directory": "/root/02-ACD-Prompt_v1.0/data",
         "dataset_class": "ACD",
         "text": {
-            "train": "train/train-5s.txt",
+            "train": "train/train-1.txt",
             "valid": "dev/valid.txt",
             "test": "test/test.txt"
         },
         "label": {
-            "train": "train/train_label-5s.txt",
+            "train": "train/train_label-1.txt",
             "valid": "dev/valid_label.txt",
             "test": "test/test_label.txt"
         }
     },
     "model": {
-        "name": "ACD_Prompt",
+        "name": "ACD_Prefix",
         "model_name_or_path": "/root/02-ACD-Prompt_v1.0/bert-base-chinese",
         "model_save_path":"/root/02-ACD-Prompt_v1.0/ckpt/",
         "pretrained_weights": null,
@@ -36,7 +37,12 @@
         "bert_hidden_size": 768,
         "num_class": 8,
         "hidden_dropout_prob": 0.2,
-        "pre_seq_len": 20
+        "hidden_size": 768,
+        "prefix_hidden_size": 2,
+        "pre_seq_len": 8,
+        "num_hidden_layers": 12,
+        "num_attention_heads": 12,
+        "use_return_dict": true
     },
     "training": {
         "epochs": 100,
