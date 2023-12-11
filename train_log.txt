@@ -1,0 +1,53 @@
+2023-12-11 11:23:02,107
+====================================================================================================
+Training Parameters: 
+    Taskname: ACD_Prefix
+    With_parameter_freeze: False
+    Train_data: /root/02-ACD-Prompt_v1.0/data/train/train-10s.txt
+    Hidden_dropout_prob: 0.2
+    Pre_seq_len: 8
+    Epochs: 100
+    Patience: 5
+    Per_gpu_train_batch_size: 4
+    Per_gpu_eval_batch_size: 8
+    Learning_rate: 1e-05
+Test Accuracy: 47.6138
+Test Loss: 1.9976
+====================================================================================================
+
+2023-12-11 11:32:43,893
+====================================================================================================
+Training Parameters: 
+    Taskname: ACD_Prefix
+    With_parameter_freeze: False
+    Train_data: /root/02-ACD-Prompt_v1.0/data/train/train-10s.txt
+    Hidden_dropout_prob: 0.2
+    Pre_seq_len: 8
+    Epochs: 100
+    Patience: 5
+    Per_gpu_train_batch_size: 2
+    Per_gpu_eval_batch_size: 8
+    Learning_rate: 1e-05
+Test Accuracy: 49.1676
+Test Loss: 2.2636
+====================================================================================================
+
+
+2023-12-11 12:42:15,224
+====================================================================================================
+Training Parameters: 
+    Taskname: ACD_Prefix
+    With_parameter_freeze: False
+    Train_data: /root/02-ACD-Prompt_v1.0/data/train/train-10s.txt
+    Hidden_dropout_prob: 0.2
+    Pre_seq_len: 8
+    Epochs: 100
+    Patience: 5
+    Per_gpu_train_batch_size: 2
+    Per_gpu_eval_batch_size: 16
+    Learning_rate: 1e-05
+Test Accuracy: 44.8391
+Test Loss: 2.4690
+====================================================================================================
+
+

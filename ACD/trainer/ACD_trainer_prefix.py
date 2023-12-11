@@ -10,6 +10,7 @@ import numpy as np
 from utils.model_utils import save_model, load_model
 from utils.metrics_utils import format_eval_output
 from utils.plot_utils import use_svg_display,set_axes,set_figsize,plot
+from utils.log_utils import log_training_info
 
 from ACD.trainer.train_base import TrainerBase
 from ACD.models.ACD_model_with_prefix import ACDModelWithPrefix
@@ -60,12 +61,13 @@ class ACDPrefixTrainer(TrainerBase):
             batch_input_mask = batch_data['input_mask'].cuda() if self.is_cuda else batch_data['input_mask']
             batch_segment_ids = batch_data['segment_ids'].cuda() if self.is_cuda else batch_data['segment_ids']
             batch_label_ids = batch_data['label_ids'].cuda() if self.is_cuda else batch_data['label_ids']
-            # print(f'label_shape:{batch_label_ids.shape}')
+            # print(f'batch_label_ids:{batch_label_ids},\nbatch_label_ids shape:{batch_label_ids.shape}')
+            
             assert batch_input_mask.size(1) == batch_input_ids.size(1), "Mask length doesn't match input length"
-            print(f'batch_input_ids shape: {batch_input_ids.shape}\n\
-                    batch_input_mask shape: {batch_input_mask.shape}\n\
-                    batch_segment_ids shape: {batch_segment_ids.shape}\n\
-                    batch_label_ids shape: {batch_label_ids.shape}')
+            # print(f'batch_input_ids shape: {batch_input_ids.shape}\n\
+            #         batch_input_mask shape: {batch_input_mask.shape}\n\
+            #         batch_segment_ids shape: {batch_segment_ids.shape}\n\
+            #         batch_label_ids shape: {batch_label_ids.shape}')
             loss, output = self.models(input_ids=batch_input_ids,
                                        attention_mask=batch_input_mask,
                                        token_type_ids=batch_segment_ids,
@@ -107,11 +109,12 @@ class ACDPrefixTrainer(TrainerBase):
                 batch_label_ids = batch_data['label_ids'].cuda() if self.is_cuda else batch_data['label_ids']
 
                 loss, output = self.models(input_ids=batch_input_ids,
-                                           input_mask=batch_input_mask,
-                                           segment_ids=batch_segment_ids,
-                                           label=batch_label_ids)
+                                           attention_mask=batch_input_mask,
+                                           token_type_ids=batch_segment_ids,
+                                           labels=batch_label_ids)
                 eval_loss += loss.item()
                 _, pred = torch.max(output, dim=-1)
+                # print(f'prediction:{pred}')
                 eval_correct += torch.sum(pred == batch_label_ids).item()
 
                 rows.extend(
@@ -137,6 +140,23 @@ class ACDPrefixTrainer(TrainerBase):
         )*100
         print('Test acc {:5.4f} | Test Macro F1 {:5.4f}'.format(final_acc, final_macro_f1))
         print('testtttttttt')
+
+        # 记录日志信息
+        args_dict = {
+        "Taskname": self.args.experiment.taskname,
+        "With_parameter_freeze": self.args.experiment.with_parameter_freeze,
+        "Train_data": self.args.data.text.train,
+        "Hidden_dropout_prob": self.args.model.hidden_dropout_prob,
+        "Pre_seq_len": self.args.model.pre_seq_len,
+        # "Max_seq_length": self.args.model.max_seq_length,
+        "Epochs": self.args.training.epochs,
+        "Patience": self.args.training.patience,
+        "Per_gpu_train_batch_size": self.args.training.per_gpu_train_batch_size,
+        "Per_gpu_eval_batch_size": self.args.training.per_gpu_eval_batch_size,
+        "Learning_rate": self.args.training.optim.learning_rate,                
+        }
+
+        log_training_info(args_dict, final_acc, final_loss, log_dir=self.args.args.log_save_path)
 
     def do_train(self):
         assert self.optimizer is not None
@@ -181,6 +201,7 @@ class ACDPrefixTrainer(TrainerBase):
 
         self.model = load_model(self.args)
         final_loss, final_acc, results = self.do_evaluate(test_flag=True)
+        # print(results)
         final_macro_f1 = f1_score(
             results.label, results.prediction, average="macro"
         )

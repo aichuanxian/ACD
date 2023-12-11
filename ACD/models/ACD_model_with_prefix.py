@@ -20,17 +20,14 @@ class ACDModelWithPrefix(nn.Module):
                                         output_hidden_states=args.model.output_hidden_states)
         self.dropout = nn.Dropout(args.model.hidden_dropout_prob)
         self.classifier = nn.Linear(args.model.hidden_size, args.model.num_class)
-
-        # from_pretrained = False
-        # if from_pretrained:
-            # self.classifier.load_state_dict(torch.load('model/checkpoint.pkl'))
+        self.softmax = nn.Softmax(dim=-1)
 
         if args.experiment.with_parameter_freeze:
-            print(f'param.requires_grad:{args.experiment.with_parameter_freeze}')
+            print(f'冻结参数')
             for param in self.bert.parameters():
                 param.requires_grad = False
         else:
-            print(f'param.requires_grad:{args.experiment.with_parameter_freeze}')
+            print(f'未冻结参数')
             for param in self.bert.parameters():
                 param.requires_grad = True
         
@@ -88,9 +85,7 @@ class ACDModelWithPrefix(nn.Module):
         # input_ids = torch.cat((past_key_values, input_ids))
         prefix_attention_mask = torch.ones(batch_size, self.pre_seq_len).to(self.bert.device)
         attention_mask = torch.cat((prefix_attention_mask, attention_mask), dim=1)
-        print(f'input_ids:{input_ids.shape}\n\
-                prefix_attention_mask:{prefix_attention_mask.shape}\n\
-                attention_mask:{attention_mask.shape}')
+        # print(f'input_ids:{input_ids.shape},\nprefix_attention_mask:{prefix_attention_mask.shape}\n,attention_mask:{attention_mask.shape}')
 
         outputs = self.bert(
             input_ids,
@@ -107,27 +102,23 @@ class ACDModelWithPrefix(nn.Module):
 
         sequence_output = outputs[0]
         sequence_output = self.dropout(sequence_output)
-        logits = self.classifier(sequence_output)
+        # print(f'sequence_output:{sequence_output}')
+        first_token_tensor = sequence_output[:, 0]
+        logits = self.classifier(first_token_tensor)
+        # print(f'logits:{logits}')
         attention_mask = attention_mask[:,self.pre_seq_len:].contiguous()
 
         loss = None
         if labels is not None:
             loss_fct = CrossEntropyLoss()
-            # Only keep active parts of the loss
-            if attention_mask is not None:
-                active_loss = attention_mask.view(-1) == 1
-                active_logits = logits.view(-1, self.num_labels)
-                print(f'active_loss:{active_loss.shape},\n active_logits:{active_logits.shape},\n label.view:{labels.view(-1).shape}')
-                active_labels = torch.where(
-                    active_loss, labels.view(-1), torch.tensor(loss_fct.ignore_index).type_as(labels)
-                )
-                loss = loss_fct(active_logits, active_labels)
-            else:
-                loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
+            loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
+            # print(f'loss:{loss}')
 
         if not return_dict:
-            output = (logits,) + outputs[2:]
-            return ((loss,) + output) if loss is not None else output
+            # output = (logits,) + outputs[2:]
+            output = self.softmax(logits)
+            # print(f'output:{output}')
+            return (loss, output) if loss is not None else output
 
         return TokenClassifierOutput(
             loss=loss,

@@ -37,6 +37,7 @@ class Arguments(object):
         parser.add_argument('--replicable', type=bool, default=True, help='')
         parser.add_argument('--is_cuda', type=bool, default=False, help='')
         parser.add_argument('--log_interval', type=int, default=10, help='')
+        parser.add_argument('--log_save_path', default='/root/02-ACD-Prompt_v1.0/', help='log save path')
 
         return parser.parse_args()
 

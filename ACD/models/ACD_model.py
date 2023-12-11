@@ -16,11 +16,11 @@ class ACDModel(nn.Module):
         self.loss_fn = nn.CrossEntropyLoss()
 
         if args.experiment.with_parameter_freeze:
-            print(f'param.requires_grad:{args.experiment.with_parameter_freeze}')
+            print(f'冻结参数')
             for param in self.bert.parameters():
                 param.requires_grad = False
         else:
-            print(f'param.requires_grad:{args.experiment.with_parameter_freeze}')
+            print(f'未冻结参数')
             for param in self.bert.parameters():
                 param.requires_grad = True
 

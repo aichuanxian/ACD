@@ -16,11 +16,11 @@ class ACDModelWithPrompt(nn.Module):
         self.loss_fct = nn.CrossEntropyLoss()
 
         if args.experiment.with_parameter_freeze:
-            print(f'param.requires_grad:{args.experiment.with_parameter_freeze}')
+            print(f'冻结参数')
             for param in self.bert.parameters():
                 param.requires_grad = False
         else:
-            print(f'param.requires_grad:{args.experiment.with_parameter_freeze}')
+            print(f'未冻结参数')
             for param in self.bert.parameters():
                 param.requires_grad = True
 
@@ -73,12 +73,18 @@ class ACDModelWithPrompt(nn.Module):
         pooled_output = self.bert.pooler.activation(pooled_output)
         # pooled_output = self.dropout(pooled_output)
         output = self.fc(pooled_output)
+        print(f'logits:{output}')
         #output = self.fc(first_token_tensor)
         output = self.softmax(output)
+        print(f'output:{output}')
         loss = None
 
         if label is not None:
+            print(f'label:{label}')
+            print(f'output shape:{output.shape}')
+            print(f'label shape:{label.shape}')
             loss = self.loss_fct(output, label)
+            # print(f'output:{output}')
             return loss, output
 
         return output

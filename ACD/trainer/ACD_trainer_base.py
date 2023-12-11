@@ -9,6 +9,7 @@ from ACD.trainer.train_base import TrainerBase
 from utils.model_utils import save_model, load_model
 from utils.metrics_utils import format_eval_output
 from utils.plot_utils import use_svg_display,set_axes,set_figsize,plot
+from utils.log_utils import log_training_info
 from transformers import get_linear_schedule_with_warmup
 import torch.optim as optim
 import numpy as np
@@ -135,6 +136,23 @@ class ACDTrainer(TrainerBase):
         )*100
         print('Test acc {:5.4f} | Test Macro F1 {:5.4f}'.format(final_acc, final_macro_f1))
         print('testtttttttt')
+
+        # 记录日志信息
+        args_dict = {
+        "Taskname": self.args.experiment.taskname,
+        "With_parameter_freeze": self.args.experiment.with_parameter_freeze,
+        "Train_data": self.args.data.text.train,
+        "Hidden_dropout_prob": self.args.model.hidden_dropout_prob,
+        "Pre_seq_len": self.args.model.pre_seq_len,
+        "Max_seq_length": self.args.model.max_seq_length,
+        "Epochs": self.args.training.epochs,
+        "Patience": self.args.training.patience,
+        "Per_gpu_train_batch_size": self.args.training.per_gpu_train_batch_size,
+        "Per_gpu_eval_batch_size": self.args.training.per_gpu_eval_batch_size,
+        "Learning_rate": self.args.training.optim.learning_rate,                
+        }
+
+        log_training_info(args_dict, final_acc, final_loss, log_dir=self.args.args.log_save_path)
 
     def do_train(self):
         assert self.optimizer is not None
