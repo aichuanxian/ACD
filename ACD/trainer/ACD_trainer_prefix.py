@@ -128,6 +128,7 @@ class ACDPrefixTrainer(TrainerBase):
         # print(rows)
         self.models.train()
 
+        print(f'eval_loss:{eval_loss},  dataloader:{len(dataloader)}')
         return eval_loss / len(dataloader), \
                (eval_correct / len(dataloader.dataset.inputs))*100, \
                format_eval_output(rows)
@@ -156,7 +157,7 @@ class ACDPrefixTrainer(TrainerBase):
         "Learning_rate": self.args.training.optim.learning_rate,                
         }
 
-        log_training_info(args_dict, final_acc, final_loss, log_dir=self.args.args.log_save_path)
+        log_training_info(args_dict, final_acc, final_macro_f1, final_loss, log_dir=self.args.args.log_save_path)
 
     def do_train(self):
         assert self.optimizer is not None

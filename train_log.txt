@@ -51,3 +51,184 @@ Test Loss: 2.4690
 ====================================================================================================
 
 
+2023-12-11 12:57:09,829
+====================================================================================================
+Training Parameters: 
+    Taskname: ACD_Prefix
+    With_parameter_freeze: False
+    Train_data: /root/02-ACD-Prompt_v1.0/data/train/train-10s.txt
+    Hidden_dropout_prob: 0.2
+    Pre_seq_len: 8
+    Epochs: 100
+    Patience: 5
+    Per_gpu_train_batch_size: 2
+    Per_gpu_eval_batch_size: 4
+    Learning_rate: 1e-05
+Test Accuracy: 38.1798
+Test Loss: 3.0642
+====================================================================================================
+
+2023-12-11 13:07:55,104
+====================================================================================================
+Training Parameters: 
+    Taskname: ACD_Prefix
+    With_parameter_freeze: False
+    Train_data: /root/02-ACD-Prompt_v1.0/data/train/train-10s.txt
+    Hidden_dropout_prob: 0.2
+    Pre_seq_len: 8
+    Epochs: 100
+    Patience: 5
+    Per_gpu_train_batch_size: 1
+    Per_gpu_eval_batch_size: 8
+    Learning_rate: 1e-05
+Test Accuracy: 50.1665
+Test Loss: 2.4394
+====================================================================================================
+
+2023-12-11 13:19:06,803
+====================================================================================================
+Training Parameters: 
+    Taskname: ACD_base
+    With_parameter_freeze: False
+    Train_data: /root/02-ACD-Prompt_v1.0/data/train/train-10s.txt
+    Hidden_dropout_prob: 0.2
+    Pre_seq_len: 20
+    Max_seq_length: 512
+    Epochs: 100
+    Patience: 5
+    Per_gpu_train_batch_size: 8
+    Per_gpu_eval_batch_size: 8
+    Learning_rate: 1e-05
+Test Accuracy: 46.6149
+Test Loss: 1.8321
+====================================================================================================
+
+2023-12-11 13:42:28,176
+====================================================================================================
+Training Parameters: 
+    Taskname: ACD_base
+    With_parameter_freeze: False
+    Train_data: /root/02-ACD-Prompt_v1.0/data/train/train-10s.txt
+    Hidden_dropout_prob: 0.2
+    Pre_seq_len: 20
+    Max_seq_length: 512
+    Epochs: 100
+    Patience: 5
+    Per_gpu_train_batch_size: 4
+    Per_gpu_eval_batch_size: 8
+    Learning_rate: 1e-05
+Test Accuracy: 48.8346
+Test Loss: 1.8428
+====================================================================================================
+
+2023-12-11 13:55:14,784
+====================================================================================================
+Training Parameters: 
+    Taskname: ACD_base
+    With_parameter_freeze: False
+    Train_data: /root/02-ACD-Prompt_v1.0/data/train/train-10s.txt
+    Hidden_dropout_prob: 0.2
+    Pre_seq_len: 20
+    Max_seq_length: 512
+    Epochs: 100
+    Patience: 5
+    Per_gpu_train_batch_size: 2
+    Per_gpu_eval_batch_size: 8
+    Learning_rate: 1e-05
+Test Accuracy: 36.2930
+Test Macro F1: 21.4234
+Test Loss: 1.8976
+====================================================================================================
+
+2023-12-11 14:10:16,770
+====================================================================================================
+Training Parameters: 
+    Taskname: ACD_base
+    With_parameter_freeze: False
+    Train_data: /root/02-ACD-Prompt_v1.0/data/train/train-10s.txt
+    Hidden_dropout_prob: 0.2
+    Pre_seq_len: 20
+    Max_seq_length: 512
+    Epochs: 100
+    Patience: 5
+    Per_gpu_train_batch_size: 1
+    Per_gpu_eval_batch_size: 8
+    Learning_rate: 1e-05
+Test Accuracy: 48.7236
+Test Macro F1: 36.2179
+Test Loss: 1.7810
+====================================================================================================
+
+2023-12-11 14:33:10,079
+====================================================================================================
+Training Parameters: 
+    Taskname: ACD_Prefix
+    With_parameter_freeze: False
+    Train_data: /root/02-ACD-Prompt_v1.0/data/train/train-10s.txt
+    Hidden_dropout_prob: 0.2
+    Pre_seq_len: 10
+    Epochs: 100
+    Patience: 5
+    Per_gpu_train_batch_size: 1
+    Per_gpu_eval_batch_size: 8
+    Learning_rate: 1e-05
+Test Accuracy: 45.2830
+Test Macro F1: 33.4881
+Test Loss: 2.6982
+====================================================================================================
+
+2023-12-11 15:27:30,661
+====================================================================================================
+Training Parameters: 
+    Taskname: ACD_Prefix
+    With_parameter_freeze: False
+    Train_data: /root/02-ACD-Prompt_v1.0/data/train/train-5s.txt
+    Hidden_dropout_prob: 0.2
+    Pre_seq_len: 8
+    Epochs: 100
+    Patience: 5
+    Per_gpu_train_batch_size: 1
+    Per_gpu_eval_batch_size: 8
+    Learning_rate: 1e-05
+Test Accuracy: 33.7403
+Test Macro F1: 25.2175
+Test Loss: 2.3981
+====================================================================================================
+
+2023-12-11 15:50:57,132
+====================================================================================================
+Training Parameters: 
+    Taskname: ACD_base
+    With_parameter_freeze: False
+    Train_data: /root/02-ACD-Prompt_v1.0/data/train/train-10s.txt
+    Hidden_dropout_prob: 0.2
+    Pre_seq_len: 20
+    Max_seq_length: 512
+    Epochs: 100
+    Patience: 5
+    Per_gpu_train_batch_size: 1
+    Per_gpu_eval_batch_size: 8
+    Learning_rate: 1e-05
+Test Accuracy: 48.8346
+Test Macro F1: 32.2570
+Test Loss: 2.2814
+====================================================================================================
+
+2023-12-11 16:54:56,204
+====================================================================================================
+Training Parameters: 
+    Taskname: ACD_Prefix
+    With_parameter_freeze: False
+    Train_data: /root/02-ACD-Prompt_v1.0/data/train/train-sem.txt
+    Hidden_dropout_prob: 0.2
+    Pre_seq_len: 8
+    Epochs: 100
+    Patience: 5
+    Per_gpu_train_batch_size: 8
+    Per_gpu_eval_batch_size: 8
+    Learning_rate: 1e-05
+Test Accuracy: 85.6250
+Test Macro F1: 81.2667
+Test Loss: 1.1558
+====================================================================================================
+

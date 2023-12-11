@@ -2,7 +2,7 @@ import logging
 import os
 from datetime import datetime
 
-def log_training_info(args_dict, test_acc, test_loss, log_dir):
+def log_training_info(args_dict, test_acc, test_macro, test_loss, log_dir):
     # 创建一个日志文件的名称
     log_file = os.path.join(log_dir, "train_log.txt")
 
@@ -24,5 +24,6 @@ def log_training_info(args_dict, test_acc, test_loss, log_dir):
     for key, value in args_dict.items():
         logger.info(f"    {key}: {value}")  # 记录args_dict中的参数
     logger.info(f"Test Accuracy: {test_acc:.4f}")
+    logger.info(f"Test Macro F1: {test_macro:.4f}")
     logger.info(f"Test Loss: {test_loss:.4f}")
     logger.info(f"="*100 + "\n") 

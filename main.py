@@ -1,4 +1,5 @@
 import torch
+import os
 from utils.args_utils import Arguments
 from ACD.trainer.ACD_trainer_base import ACDTrainer
 from ACD.trainer.ACD_trainer_prompt import ACDPromptTrainer
@@ -8,6 +9,10 @@ from scripts.checkpoint import avg_ckpt
 
 if __name__ == '__main__':
     args = Arguments()
+    model_path = '/root/02-ACD-Prompt_v1.0/ckpt/model.pt'
+    if os.path.exists(model_path):
+        os.remove(model_path)
+
     print(f'torch.cuda.is_available:{torch.cuda.is_available()}')
     if torch.cuda.is_available():
         args.args.is_cuda = True

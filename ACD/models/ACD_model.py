@@ -40,11 +40,11 @@ class ACDModel(nn.Module):
         output = self.fc(pooled_output)
 
         #output = self.fc(bert_output[1])
-        output = self.softmax(output)
         loss = None
 
         if label is not None:
             loss = self.loss_fn(output, label)
+            output = self.softmax(output)
             return loss, output
 
         return output

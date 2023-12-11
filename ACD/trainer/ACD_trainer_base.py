@@ -152,7 +152,7 @@ class ACDTrainer(TrainerBase):
         "Learning_rate": self.args.training.optim.learning_rate,                
         }
 
-        log_training_info(args_dict, final_acc, final_loss, log_dir=self.args.args.log_save_path)
+        log_training_info(args_dict, final_acc, final_macro_f1, final_loss, log_dir=self.args.args.log_save_path)
 
     def do_train(self):
         assert self.optimizer is not None
@@ -201,7 +201,7 @@ class ACDTrainer(TrainerBase):
         final_loss, final_acc, results = self.do_evaluate(test_flag=True)
         final_macro_f1 = f1_score(
             results.label, results.prediction, average="macro"
-        )
+        )*100
         print('Final acc {:5.4f} | Final Macro F1 {:5.4f}'.format(final_acc, final_macro_f1))         
         print('Validdddddd')
 

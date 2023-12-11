@@ -15,14 +15,14 @@
         "directory": "/root/02-ACD-Prompt_v1.0/data",
         "dataset_class": "ACD",
         "text": {
-            "train": "train/train-all.txt",
-            "valid": "dev/valid.txt",
-            "test": "test/test.txt"
+            "train": "train/train-sem.txt",
+            "valid": "dev/valid-sem.txt",
+            "test": "test/test-sem.txt"
         },
         "label": {
-            "train": "train/train_label-all.txt",
-            "valid": "dev/valid_label.txt",
-            "test": "test/test_label.txt"
+            "train": "train/train_label-sem.txt",
+            "valid": "dev/valid_label-sem.txt",
+            "test": "test/test_label-sem.txt"
         }
     },
     "model": {
