@@ -199,7 +199,7 @@ class ACDPromptTrainer(TrainerBase):
 
         self.model = load_model(self.args)
         final_loss, final_acc, results = self.do_evaluate(test_flag=True)
-        print(results)
+        # print(results)
         final_macro_f1 = f1_score(
             results.label, results.prediction, average="macro"
         )

@@ -73,16 +73,16 @@ class ACDModelWithPrompt(nn.Module):
         pooled_output = self.bert.pooler.activation(pooled_output)
         # pooled_output = self.dropout(pooled_output)
         output = self.fc(pooled_output)
-        print(f'logits:{output}')
+        # print(f'logits:{output}')
         #output = self.fc(first_token_tensor)
         output = self.softmax(output)
-        print(f'output:{output}')
+        # print(f'output:{output}')
         loss = None
 
         if label is not None:
-            print(f'label:{label}')
-            print(f'output shape:{output.shape}')
-            print(f'label shape:{label.shape}')
+            # print(f'label:{label}')
+            # print(f'output shape:{output.shape}')
+            # print(f'label shape:{label.shape}')
             loss = self.loss_fct(output, label)
             # print(f'output:{output}')
             return loss, output

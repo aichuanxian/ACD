@@ -140,6 +140,7 @@ class ACDTrainer(TrainerBase):
         # 记录日志信息
         args_dict = {
         "Taskname": self.args.experiment.taskname,
+        "Model_name":self.args.model.model_name_or_path,
         "With_parameter_freeze": self.args.experiment.with_parameter_freeze,
         "Train_data": self.args.data.text.train,
         "Hidden_dropout_prob": self.args.model.hidden_dropout_prob,
@@ -149,7 +150,7 @@ class ACDTrainer(TrainerBase):
         "Patience": self.args.training.patience,
         "Per_gpu_train_batch_size": self.args.training.per_gpu_train_batch_size,
         "Per_gpu_eval_batch_size": self.args.training.per_gpu_eval_batch_size,
-        "Learning_rate": self.args.training.optim.learning_rate,                
+        "Learning_rate": self.args.training.optim.learning_rate,                  
         }
 
         log_training_info(args_dict, final_acc, final_macro_f1, final_loss, log_dir=self.args.args.log_save_path)

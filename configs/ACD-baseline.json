@@ -15,19 +15,19 @@
         "directory": "/root/02-ACD-Prompt_v1.0/data",
         "dataset_class": "ACD",
         "text": {
-            "train": "train/train-sem.txt",
+            "train": "train/train-sem10s.txt",
             "valid": "dev/valid-sem.txt",
             "test": "test/test-sem.txt"
         },
         "label": {
-            "train": "train/train_label-sem.txt",
+            "train": "train/train_label-sem10s.txt",
             "valid": "dev/valid_label-sem.txt",
             "test": "test/test_label-sem.txt"
         }
     },
     "model": {
         "name": "ACD",
-        "model_name_or_path": "/root/02-ACD-Prompt_v1.0/bert-base-chinese",
+        "model_name_or_path": "/root/02-ACD-Prompt_v1.0/bert-base-uncased",
         "model_save_path":"/root/02-ACD-Prompt_v1.0/ckpt/",
         "pretrained_weights": null,
         "do_lower_case": true,
@@ -35,17 +35,17 @@
         "output_hidden_states": false,
         "bert_hidden_size": 768,
         "num_class": 8,
-        "hidden_dropout_prob": 0.2,
+        "hidden_dropout_prob": 0.25,
         "pre_seq_len": 20,
         "max_seq_length": 512
     },
     "training": {
         "epochs": 100,
         "patience": 5,
-        "per_gpu_train_batch_size": 8,
+        "per_gpu_train_batch_size": 2,
         "per_gpu_eval_batch_size": 8,
         "optim": {
-            "learning_rate": 1e-5,
+            "learning_rate": 5e-5,
             "max_steps": -1,
             "gradient_accumulation_steps": 1,
             "weight_decay": 0.01,
